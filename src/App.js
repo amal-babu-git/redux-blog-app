@@ -1,12 +1,17 @@
 import React from 'react';
 import './App.css';
-import Counter from './features/counter/Counter';
+import AddPostForm from './features/posts/AddPostForm';
+import PostsList from './features/posts/PostsList';
+
 
 function App() {
   return (
-    <div className="App">
-      <Counter />
-    </div>
+    <main className="App">
+
+      <AddPostForm/>
+      <PostsList />
+
+    </main>
   );
 }
 
