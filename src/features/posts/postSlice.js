@@ -1,15 +1,32 @@
 import { createSlice, nanoid } from "@reduxjs/toolkit"
+import { sub } from "date-fns"
 
 const initialState = [
     {
         id: '1',
         title: 'Learnig redux toolkit',
-        content: 'React redux toolkit , reduz is a state management tool for webapplications based on js&ts'
+        content: 'React redux toolkit , reduz is a state management tool for webapplications based on js&ts',
+        date: sub(new Date(), { minutes: 10 }).toISOString(),
+        reactions: {
+            thumbsUp: 0,
+            wow: 0,
+            heart: 0,
+            rocket: 0,
+            coffee: 0
+        }
     },
     {
         id: '2',
         title: 'Django REST',
-        content: 'Django REST is an opensource web framework'
+        content: 'Django REST is an opensource web framework',
+        date: sub(new Date(), { minutes: 5 }).toISOString(),
+        reactions: {
+            thumbsUp: 0,
+            wow: 0,
+            heart: 0,
+            rocket: 0,
+            coffee: 0
+        }
     }
 ]
 
@@ -22,20 +39,36 @@ const postsSlice = createSlice({
             reducer(state, action) {
                 state.push(action.payload)
             },
-            prepare(title, content,userId) {
+            prepare(title, content, userId) {
                 return {
                     payload: {
                         id: nanoid(),
                         title,
                         content,
-                        userId
+                        date: new Date().toISOString(),
+                        userId,
+                        reactions: {
+                            thumbsUp: 0,
+                            wow: 0,
+                            heart: 0,
+                            rocket: 0,
+                            coffee: 0
+                        }
                     }
                 }
             }
+        },
+        reactionAdded(state, action) {
+            const { postId, reaction } = action.payload
+            const existingPost = state.find(post => post.id === postId)
+            if (existingPost) {
+                existingPost.reactions[reaction]++
+            }
         }
+
     }
 })
 
 export const selectAllPosts = (state) => state.posts;
-export const { postAdded } = postsSlice.actions
+export const { postAdded,reactionAdded } = postsSlice.actions
 export default postsSlice.reducer
